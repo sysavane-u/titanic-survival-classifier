@@ -174,3 +174,4 @@ titanic-survival-classifier/
 ├── train.csv               # Source dataset (Kaggle)
 └── README.md               # This report
 ```
+Note: train.csv is not included in this repository. Download it directly from the Kaggle Titanic Competition.
