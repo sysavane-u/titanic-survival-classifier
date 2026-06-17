@@ -1,68 +1,71 @@
-# ═══════════════════════════════════════════════════════
-# Titanic Survival Classification Model
-# Author: Sy Savane Usman
-# Date: June 2026
-# Description: Logistic regression model to predict
-#              Titanic passenger survival probability
-# Tools: Python, Pandas, scikit-learn
-# Dataset: Kaggle Titanic Competition
-# ═══════════════════════════════════════════════════════
-
-import pandas as pd
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix, classification_report
-
-pd.set_option("display.max_columns", None)
-pd.set_option("display.width", None)
-
-df = pd.read_csv("/kaggle/input/competitions/titanic/train.csv")
-
-# ── Data Cleaning ────────────────────────────────────────
-# Drop columns that are irrelevant or too complex to encode
-df = df.drop(columns=["Name", "PassengerId", "Ticket", "Cabin"])
-
-# Impute missing values
-df["Age"] = df["Age"].fillna(round(df["Age"].mean()))         # Mean imputation for continuous variable
-df["Embarked"] = df["Embarked"].fillna(df["Embarked"].mode()[0])  # Mode imputation for categorical variable
-
-# Encode categorical columns using one-hot encoding
-# drop_first=True avoids multicollinearity (reference categories: Female, Cherbourg)
-df = pd.get_dummies(df, columns=["Sex", "Embarked"], drop_first=True)
-
-# Convert boolean columns to integers (0/1)
-df = df.astype({col: int for col in df.select_dtypes(bool).columns})
-
-# ── Model Training ───────────────────────────────────────
-X = df.drop(columns=["Survived"])   # Feature matrix
-y = df["Survived"]                  # Target vector
-
-# 80/20 train-test split with fixed random state for reproducibility
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-model = LogisticRegression(max_iter=1000)
-model.fit(X_train, y_train)
-
-# ── Model Evaluation ─────────────────────────────────────
-# Default threshold (0.5)
-y_pred = model.predict(X_test)
-
-print("=" * 55)
-print("EVALUATION — Default Threshold (0.5)")
-print("=" * 55)
-print("\nConfusion Matrix:")
-print(confusion_matrix(y_test, y_pred))
-print("\nClassification Report:")
-print(classification_report(y_test, y_pred))
-
-# Tuned threshold (0.4) — prioritises recall to catch more survivors
-y_proba = model.predict_proba(X_test)[:, 1]
-y_pred_tuned = [1 if p >= 0.4 else 0 for p in y_proba]
-
-print("=" * 55)
-print("EVALUATION — Tuned Threshold (0.4)")
-print("=" * 55)
-print("\nConfusion Matrix:")
-print(confusion_matrix(y_test, y_pred_tuned))
-print("\nClassification Report:")
-print(classification_report(y_test, y_pred_tuned))
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "02d9be6e",
+   "metadata": {
+    "papermill": {
+     "duration": 0.001627,
+     "end_time": "2026-06-17T18:14:20.757371+00:00",
+     "exception": false,
+     "start_time": "2026-06-17T18:14:20.755744+00:00",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# ═══════════════════════════════════════════════════════\n",
+    "# Titanic Survival Classification Model\n",
+    "# Author: Sy Savane Usman\n",
+    "# Date: June 2026\n",
+    "# Description: Logistic regression model to predict\n",
+    "#              Titanic passenger survival probability\n",
+    "# Tools: Python, Pandas, scikit-learn\n",
+    "# Dataset: Kaggle Titanic Competition\n",
+    "# ═══════════════════════════════════════════════════════\n"
+   ]
+  }
+ ],
+ "metadata": {
+  "kaggle": {
+   "accelerator": "none",
+   "dataSources": [],
+   "dockerImageVersionId": 28755,
+   "isGpuEnabled": false,
+   "isInternetEnabled": false,
+   "language": "python",
+   "sourceType": "notebook"
+  },
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.13"
+  },
+  "papermill": {
+   "default_parameters": {},
+   "duration": 4.715472,
+   "end_time": "2026-06-17T18:14:21.179839+00:00",
+   "environment_variables": {},
+   "exception": null,
+   "input_path": "__notebook__.ipynb",
+   "output_path": "__notebook__.ipynb",
+   "parameters": {},
+   "start_time": "2026-06-17T18:14:16.464367+00:00",
+   "version": "2.7.0"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
